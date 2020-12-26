@@ -35,12 +35,17 @@
 *.i*86
 *.x86_64
 *.hex
+*.eep
+*.elf
 
 # Debug files
 *.dSYM/
 *.su
 *.idb
 *.pdb
+*.lss
+*.sym
+*.lst
 
 # Kernel Module Compile Results
 *.mod*
