@@ -25,11 +25,14 @@
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #include "bar_leds.h"
+#include "digit_leds.h"
 #include "usb_debug_only.h"
 #include "print.h"
 
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 #define DIT 80		/* unit time for morse code */
+
+void initialize_io(void);
 
 void morse_character(char c);
 void morse_P(const char *s);
@@ -40,10 +43,9 @@ int main(void)
 {
 	unsigned char i;
 
-	// set for 16 MHz clock, and make sure the LED is off
+	// set for 16 MHz clock
 	CPU_PRESCALE(0);
-	initialize_bar_leds();
-	set_bar_leds(0);
+	initialize_io();
 
 	// initialize the USB, but don't want for the host to
 	// configure.  The first several messages sent will be
@@ -53,11 +55,19 @@ int main(void)
 
 	// blink morse code messages!
 	while (1) {
-		for (i=0; i<= 10; i++) {
+		for (i=0; i<= 15; i++) {
 			set_bar_leds(i);
+			set_digit_leds(i);
+			set_decimal_point(i > 9);
 			_delay_ms(2000);
 		}
 	}
+}
+
+void initialize_io()
+{
+	initialize_bar_leds();
+	initialize_digit_leds();
 }
 
 // blink a single character in Morse code

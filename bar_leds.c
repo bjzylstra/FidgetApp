@@ -3,42 +3,14 @@
 
 #include "bar_leds.h"
 
-const unsigned char portd_for_number[];
-const unsigned char porte_for_number[];
-
 void initialize_bar_leds(void)
 {
-	DDRD |= 0xFF;
+	// Bar leds are active low so set to 0s to turn off.
+	DDRD |= 0xff;
+	PORTD = 0;
 	DDRE |= 0x3;
+	PORTE &= 0xfc;
 }
-
-const unsigned char portd_for_number[] PROGMEM = {
-	0x0,
-	0x1,
-	0x3,
-	0x7,
-	0xf,
-	0x1f,
-	0x3f,
-	0x7f,
-	0xff,
-	0xff,
-	0xff
-};
-
-const unsigned char porte_for_number[] PROGMEM = {
-	0x0,
-	0x0,
-	0x0,
-	0x0,
-	0x0,
-	0x0,
-	0x0,
-	0x0,
-	0x0,
-	0x1,
-	0x3
-};
 
 void set_bar_leds(unsigned char number)
 {
@@ -46,15 +18,25 @@ void set_bar_leds(unsigned char number)
 	phex(number);
 	print("\n");
 	
-	/* Convert the number to a bit mask */
-	if (number > 10)
-	{
-		number = 0;
-	}
-	
-	unsigned char portd_value = pgm_read_byte(portd_for_number + number);
+	// Left shift always fills with a 0 so 
+	// start with all bits set and shift left by number
+	// and invert
+	unsigned char lowerDigit = number % 10;
+	unsigned char portd_value = 0xff;
+	portd_value <<= lowerDigit;
+	portd_value = ~portd_value;
 	PORTD = portd_value;
 	
-	unsigned char porte_value = pgm_read_byte(porte_for_number + number);
+	// 9th digit is on portE bit 0
+	unsigned char porte_value = 0;
+	if (lowerDigit == 9)
+	{
+		porte_value |= 0x1;
+	}
+	// 10s digit is on portE bit 10
+	if (number > 9)
+	{
+		porte_value |= 0x2;
+	}
 	PORTE = (PORTE & 0xfc) | porte_value;
 }
