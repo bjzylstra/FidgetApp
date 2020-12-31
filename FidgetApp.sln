@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5936A5D9-9ED1-4CA4-BCE0-ABB44A5C393A}"
+	ProjectSection(SolutionItems) = preProject
+		bar_leds.c = bar_leds.c
+		bar_leds.h = bar_leds.h
+		FidgetApp.hex = FidgetApp.hex
+		main.c = main.c
+		Makefile = Makefile
+		print.c = print.c
+		print.h = print.h
+		README.md = README.md
+		usb_debug_only.c = usb_debug_only.c
+		usb_debug_only.h = usb_debug_only.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28603939-AD89-4489-8BF3-5088BA11006F}
+	EndGlobalSection
+EndGlobal

@@ -24,15 +24,10 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
+#include "bar_leds.h"
 #include "usb_debug_only.h"
 #include "print.h"
 
-
-// Teensy 1.0: LED is active high
-#define LED_ON	(PORTD |= (1<<6))
-#define LED_OFF	(PORTD &= ~(1<<6))
-
-#define LED_CONFIG	(DDRD |= (1<<6))
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 #define DIT 80		/* unit time for morse code */
 
@@ -47,8 +42,8 @@ int main(void)
 
 	// set for 16 MHz clock, and make sure the LED is off
 	CPU_PRESCALE(0);
-	LED_CONFIG;
-	LED_OFF;
+	initialize_bar_leds();
+	set_bar_leds(0);
 
 	// initialize the USB, but don't want for the host to
 	// configure.  The first several messages sent will be
@@ -58,12 +53,10 @@ int main(void)
 
 	// blink morse code messages!
 	while (1) {
-		for (i=0; i<6; i++) {
-			morse_P(PSTR("SOS"));
-			_delay_ms(1500);
+		for (i=0; i<= 10; i++) {
+			set_bar_leds(i);
+			_delay_ms(2000);
 		}
-		morse_P(PSTR("DOES ANYBODY STILL KNOW MORSE CODE?"));
-		_delay_ms(4000);
 	}
 }
 
@@ -88,7 +81,7 @@ void morse_character(char c)
 	pchar(':');
 	code = pgm_read_byte(morse_code_table + (c - 'A'));
 	for (count = code & 0x07; count > 0; count--) {
-		LED_ON;
+		set_bar_leds(10);
 		if (code & 0x80) {
 			print(" dah");
 			_delay_ms(DIT * 3);
@@ -96,7 +89,7 @@ void morse_character(char c)
 			print(" dit");
 			_delay_ms(DIT);
 		}
-		LED_OFF;
+		set_bar_leds(0);
 		_delay_ms(DIT);
 		code = code << 1;
 	}

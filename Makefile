@@ -46,6 +46,7 @@ TARGET = FidgetApp
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC =	main.c \
+	bar_leds.c \
 	usb_debug_only.c \
 	print.c
 
