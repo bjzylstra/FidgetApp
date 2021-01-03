@@ -48,6 +48,7 @@ TARGET = FidgetApp
 SRC =	main.c \
 	bar_leds.c \
 	binary_leds.c \
+	binary_switches.c \
 	digit_leds.c \
 	usb_debug_only.c \
 	print.c

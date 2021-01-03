@@ -26,6 +26,7 @@
 #include <util/delay.h>
 #include "bar_leds.h"
 #include "binary_leds.h"
+#include "binary_switches.h"
 #include "digit_leds.h"
 #include "usb_debug_only.h"
 #include "print.h"
@@ -42,8 +43,6 @@ const unsigned char morse_code_table[];
 
 int main(void)
 {
-	unsigned char i;
-
 	// set for 16 MHz clock
 	CPU_PRESCALE(0);
 	initialize_io();
@@ -56,13 +55,12 @@ int main(void)
 
 	// blink morse code messages!
 	while (1) {
-		for (i=0; i<= 15; i++) {
-			set_bar_leds(i);
-			set_binary_leds(i);
-			set_digit_leds(i);
-			set_decimal_point(i > 9);
-			_delay_ms(2000);
-		}
+		unsigned char number = read_binary_switches();
+		set_bar_leds(number);
+		set_binary_leds(number);
+		set_digit_leds(number);
+		set_decimal_point(number > 9);
+		_delay_ms(1000);
 	}
 }
 
@@ -71,6 +69,7 @@ void initialize_io()
 	initialize_bar_leds();
 	initialize_binary_leds();
 	initialize_digit_leds();
+	initialize_binary_switches();
 }
 
 // blink a single character in Morse code

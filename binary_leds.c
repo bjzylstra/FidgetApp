@@ -5,7 +5,7 @@
 
 void initialize_binary_leds(void)
 {
-	// Bar leds are active low so set to 0s to turn off.
+	// Binary leds are active high so set to 0s to turn off.
 	DDRB |= 0xf;
 	PORTB &= ~0xf;
 }
@@ -19,8 +19,5 @@ void set_binary_leds(unsigned char number)
 	// Direct bit map of the number.
 	unsigned char portb_value = PORTB & ~0xf;
 	portb_value |= (number & 0xf);
-	print("PORTB value = ");
-	phex(portb_value);
-	print("\n");
 	PORTB = portb_value;
 }
