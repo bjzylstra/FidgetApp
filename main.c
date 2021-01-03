@@ -25,6 +25,7 @@
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #include "bar_leds.h"
+#include "binary_leds.h"
 #include "digit_leds.h"
 #include "usb_debug_only.h"
 #include "print.h"
@@ -57,6 +58,7 @@ int main(void)
 	while (1) {
 		for (i=0; i<= 15; i++) {
 			set_bar_leds(i);
+			set_binary_leds(i);
 			set_digit_leds(i);
 			set_decimal_point(i > 9);
 			_delay_ms(2000);
@@ -67,6 +69,7 @@ int main(void)
 void initialize_io()
 {
 	initialize_bar_leds();
+	initialize_binary_leds();
 	initialize_digit_leds();
 }
 

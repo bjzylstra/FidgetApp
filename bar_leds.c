@@ -5,7 +5,7 @@
 
 void initialize_bar_leds(void)
 {
-	// Bar leds are active low so set to 0s to turn off.
+	// Bar leds are active high so set to 0s to turn off.
 	DDRD |= 0xff;
 	PORTD = 0;
 	DDRE |= 0x3;
