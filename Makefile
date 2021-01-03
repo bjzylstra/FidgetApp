@@ -50,6 +50,7 @@ SRC =	main.c \
 	binary_leds.c \
 	binary_switches.c \
 	digit_leds.c \
+	mode_switches.c \
 	usb_debug_only.c \
 	print.c
 
