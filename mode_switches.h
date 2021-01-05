@@ -13,7 +13,8 @@ enum mode
 {
 	count,
 	binary,
-	slider
+	slider,
+	unknown
 };
 
 void initialize_mode_switches(void);

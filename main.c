@@ -23,33 +23,52 @@ int main(void)
 	// configure.
 	usb_init();
 
-	// blink morse code messages!
 	unsigned char number = 0;
+	enum mode lastModeSwitch = unknown;
+	unsigned int delaySinceUpdate = 0;
+	unsigned int delayBetweenUpdates = 1000;
+	unsigned int delay = 100;
 	while (1) {
 		enum mode modeSwitch = read_mode_switch();
+		if (modeSwitch == unknown)
+		{
+			modeSwitch = lastModeSwitch;
+		}
 		enum count_direction direction = read_direction_switch();
 		switch (modeSwitch)
 		{
 			case count:
-				if (direction == up)
+				delaySinceUpdate += delay;
+				if (delaySinceUpdate >= delayBetweenUpdates)
 				{
-					if (++number > 9)
+					delaySinceUpdate = 0;
+					if (direction == up)
 					{
-						number = 0;
+						if (++number > 9)
+						{
+							number = 0;
+						}
+					}
+					else
+					{
+						if (--number > 9)
+						{
+							number = 9;
+						}
 					}
 				}
-				else
-				{
-					if (--number > 9)
-					{
-						number = 9;
-					}
-				}
+				lastModeSwitch = modeSwitch;
 				break;
 			case binary:
 				number = read_binary_switches();
+				delaySinceUpdate = 0;
+				lastModeSwitch = modeSwitch;
 				break;
 			case slider:
+				delaySinceUpdate = 0;
+				lastModeSwitch = modeSwitch;
+				break;
+			case unknown:
 				break;
 		}
 
@@ -57,7 +76,7 @@ int main(void)
 		set_binary_leds(number);
 		set_digit_leds(number);
 		set_decimal_point(number > 9);
-		_delay_ms(1000);
+		_delay_ms(delay);
 	}
 }
 
