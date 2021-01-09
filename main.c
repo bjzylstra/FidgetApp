@@ -6,6 +6,7 @@
 #include "binary_switches.h"
 #include "digit_leds.h"
 #include "mode_switches.h"
+#include "slider.h"
 #include "usb_debug_only.h"
 //#include "print.h"
 
@@ -58,17 +59,26 @@ int main(void)
 					}
 				}
 				lastModeSwitch = modeSwitch;
+				set_slider_light(false);
 				break;
 			case binary:
 				number = read_binary_switches();
 				delaySinceUpdate = 0;
 				lastModeSwitch = modeSwitch;
+				set_slider_light(false);
 				break;
 			case slider:
 				delaySinceUpdate = 0;
 				lastModeSwitch = modeSwitch;
+				char sliderValue = read_slider(9);
+				if ((sliderValue & 0x80) == 0)
+				{
+					number = sliderValue;
+				}
+				set_slider_light(true);
 				break;
 			case unknown:
+				set_slider_light(false);
 				break;
 		}
 
@@ -87,4 +97,5 @@ void initialize_io()
 	initialize_digit_leds();
 	initialize_binary_switches();
 	initialize_mode_switches();
+	initialize_slider();
 }
